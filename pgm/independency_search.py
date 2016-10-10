@@ -50,16 +50,16 @@ def print_table(keys, ids, _sub_):
         LOG( DEBUG, '%s    %s'%('    '.join([ str(l) for l in com]), _sub_[com]))
 
 def solve(_dict, P_tag):
-"""
-Compute all joint probabilities of listed variables
-eg.
-A, B, C, D
-compute
-P(A, B, C, D)
-P(A, B, C), P(A, B, D), P(A, C, D), P(B, C, D)
-P(A, B), P(A, C), P(A, D), P(B, C), P(B, D), P(C, D)
-P(A), P(B), P(C), P(D)
-"""
+    """
+    Compute all joint probabilities of listed variables
+    eg.
+    A, B, C, D
+    compute
+    P(A, B, C, D)
+    P(A, B, C), P(A, B, D), P(A, C, D), P(B, C, D)
+    P(A, B), P(A, C), P(A, D), P(B, C), P(B, D), P(C, D)
+    P(A), P(B), P(C), P(D)
+    """
     keys = _dict.keys()
     keys.sort()
     keys.remove(P_tag)
@@ -86,10 +86,10 @@ P(A), P(B), P(C), P(D)
 def parse_to_string(keys, lt):
     return ','.join([ keys[l] for l in lt])
 
-def find_independency(keys, joint, eps = 0.001):
-"""
-Compute all (conditional) indepencies
-"""
+def find_independency(keys, joint, eps = 0.0000001):
+    """
+    Compute all (conditional) indepencies
+    """
     num_var = len(keys)
     # search for independency
     
@@ -170,7 +170,7 @@ Compute all (conditional) indepencies
 
 
 if __name__ == '__main__':
-    table_name = '4-table1.txt'
+    table_name = '4-table2.txt'
     _dict, P_tag = read_file(table_name)
     keys, joint = solve(_dict, P_tag)
     #LOG( DEBUG, "##########################")
