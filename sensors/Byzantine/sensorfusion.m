@@ -43,7 +43,7 @@ for i = 1:PEnum
      j  = 1;
      while j <= length(points) - 1
          tmplist = [tmplist; B(j), B(j+1)];
-         tmpid = [tmpid; counts(id_ori(j))];
+         tmpid = [tmpid; min(counts(id_ori(j)), counts(id_ori(j+1)))];
          if j + 2 <= length(points) && counts(id_ori(j+2)) ~= counts(id_ori(j))
              j = j + 1;
          else
@@ -52,7 +52,7 @@ for i = 1:PEnum
      end
      list{i} = tmplist;
      ids{i} = tmpid;
-     range{i} = [ points(1), points(end) ]; 
+     range{i} = [ B(1), B(end) ]; 
 end
 
 

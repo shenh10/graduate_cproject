@@ -25,10 +25,10 @@ for i = 1: fault_num
      Fault_delta(i, :) = tline( PEnum + 2 + i, :);
 end
 disp('Dolev Algorithm');
-res1= dolev( PEnum, Corr, Fault );
+%res1= dolev( PEnum, Corr, Fault );
 disp ('FCA Algorithm');
 res2= mahaney( PEnum, Corr, Corr_delta, Fault, Fault_delta );
 disp ('Sensor Fusion Algorithm');
 [list, ids, range ] = sensorfusion( PEnum, Corr, Corr_delta, Fault, Fault_delta );
 disp ('Hybrid Algorithm');
-%res3  = hybrid( PEnum, Corr,Corr_delta, Fault, Fault_delta );
+res3  = hybrid( PEnum, Corr,Corr_delta, Fault, Fault_delta );

@@ -7,17 +7,20 @@ cur_pe = zeros(1,PEnum);
 corr_num = length(Corr);
 cur_pe(1:corr_num ) = Corr;
 t = floor((PEnum - 1)/3);
-eps = 0.01;
+eps = 0.0000000001;
 abs_val = 2.75;
 acc_ori = max(Corr - abs_val) ;
+delta = 0.5;
+iter = 0;
 while 1
     flag =   0;
     cur_pe_last = cur_pe;
     for i = 1:PEnum
+        if i == 1
         v = [ cur_pe_last(1:corr_num),  Fault(:, i)' ];
-        v_ori = [ Corr(1:corr_num),  Fault(:, i)' ];
-        v_delta = [Corr_delta(1:corr_num), Fault_delta(:, i)'];
-
+        else
+            v = cur_pe_last;
+        end
         % check acceptable values
         acc = [];
         idx = [];
@@ -25,7 +28,7 @@ while 1
             % check v[j] is acceptable
             count = 0;
             for k = 1: length(v)
-                if abs(v(j) - v(k)) <= acc_ori;
+                if abs(v(j) - v(k)) <= delta;
                     count = count + 1;
                 end
             end
@@ -46,10 +49,12 @@ while 1
     
     end
     disp(cur_pe);
- fprintf('Precesion: %f \n',    max(cur_pe)-min(cur_pe));
+    fprintf('Precesion: %f \n',    max(cur_pe)-min(cur_pe));
     if flag == 0
           break
     end
+    iter = iter + 1;
 end
+fprintf('Iteration num: %d\n', iter);
 end
 

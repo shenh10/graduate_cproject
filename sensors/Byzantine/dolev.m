@@ -5,16 +5,15 @@ cur_pe = zeros(1,PEnum);
 corr_num = length(Corr);
 cur_pe(1:corr_num ) = Corr;
 t = floor((PEnum - 1)/3);
-eps = 0.001;
+eps = 10^(-10);
+iter = 0;
 while 1
     flag =   0;
     cur_pe_last = cur_pe;
     for i = 1:PEnum
         v = sort([ cur_pe_last(1:corr_num),  Fault(:, i)' ]);
         v = v(1+ t:end-t);
-        idx =[1, [1: floor(length(v)/t)]*t];
-        %newv = mean(v(idx));
-         newv = mean(v);
+        newv = mean(v);
         if abs(newv - cur_pe(i)) > eps
             flag = 1;
         end
@@ -25,6 +24,8 @@ while 1
     if flag == 0
           break
     end
+    iter = iter +  1;
 end
+fprintf('Iteration num: %d\n', iter);
 end
 
