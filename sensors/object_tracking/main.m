@@ -1,4 +1,4 @@
-input = '../../../cv/tracker_benchmarks/data/otb100/Human2/img';
+input = '../../../cv/tracker_benchmarks/data/otb100/Dancer/img';
 ext = 'jpg';
 D = dir(fullfile(input,['*.', ext]));
 file_list={D.name};
@@ -22,5 +22,7 @@ end
 
 rect = kernel_ot( I_orig, target_q, m, rect );
 rectangle('position',rect,'LineWidth',2,'EdgeColor','r');
+rectangle('position',total_gt(frame_id,:),'LineWidth',2,'EdgeColor','b');
+
 pause(0.01);
 end

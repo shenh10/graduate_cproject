@@ -22,11 +22,8 @@ for i = 1:row
     end
 end
 y_new = [ sum(sum(w.* repmat([1:col],row,1)))/sum(sum(w)),sum(sum(w.* repmat([1:row]',1,col)))/sum(sum(w))];
-disp(y_old);
-disp(y_new);
 rectangle('position',last_rect,'LineWidth',2,'EdgeColor','r');
 last_rect = [ y_new(1) + last_rect(1) - last_rect(3)/2, y_new(2) + last_rect(2) - last_rect(4)/2, last_rect(3:end)];
-disp(last_rect);
 if norm(y_old-y_new) < eps
     break;
 else
