@@ -1,0 +1,3 @@
+%% Experiment with the cnn_mnist_fc_bnorm
+[net_rl, info_rl] = snn_mnist(...
+  'expDir', 'data/snn/mnist-relu');

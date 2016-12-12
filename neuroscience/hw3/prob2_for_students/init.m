@@ -1,0 +1,9 @@
+function centroids=init(qmax,gridsz)
+[x,y] =meshgrid(1:gridsz);
+centroids(:,1)=x(:);
+centroids(:,2)=y(:);
+phi=rand(gridsz^2,1)*pi;
+q=0.01*qmax;
+centroids(:,3)= q*sin(2*phi);
+centroids(:,4)= q*cos(2*phi);
+centroids(:,5)= zeros(gridsz^2,1);
