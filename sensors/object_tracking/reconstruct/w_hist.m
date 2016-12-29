@@ -10,7 +10,7 @@ if nargin > 4
     ring = varargin{2};
     if ring
         inner_rect = varargin{3};
-        [i_row, i_col] = size(imcrop(I,inner_rect));
+        [i_row, i_col, ~] = size(imcrop(I,inner_rect));
     end
 end
 if nargin > 3

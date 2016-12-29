@@ -16,10 +16,11 @@ switch option
         rects(1) = rect(1)-0.5*0.1*(i_scale-(num_scale+1)/2)*rect(3);
         rects(2) = rect(2)-0.5*0.1*(i_scale-(num_scale+1)/2)*rect(4); 
     case 'bg'
-        rects(3) = rect(3)+ceil(2*rect(3));
-        rects(4) = rect(4)+ceil(2*rect(4));     
-        rects(1) = rect(1)-0.5*2*rect(3);
-        rects(2) = rect(2)-0.5*2*rect(4); 
+        sigma = 2;
+        rects(3) = rect(3)+ceil(sigma*rect(3));
+        rects(4) = rect(4)+ceil(sigma*rect(4));     
+        rects(1) = rect(1)-0.5*sigma*rect(3);
+        rects(2) = rect(2)-0.5*sigma*rect(4); 
 end 
 
 end

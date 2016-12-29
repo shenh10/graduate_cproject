@@ -34,12 +34,13 @@ k = 0.1;
 A = 0.01;
 eps = 0.1;
 step = 1;
+target = 1;
 while abs(summ(A,k,ssd)-1) > eps
-    if summ(A,k,ssd) > 1
+    if summ(A,k,ssd) > target
         step = min(1,step) * 3;
         k = k*step;
     end
-    if summ(A,k,ssd) < 1
+    if summ(A,k,ssd) < target
         step = max(step,1) * 0.5;
         k = k*step;
     end

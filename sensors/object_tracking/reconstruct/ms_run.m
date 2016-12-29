@@ -38,8 +38,11 @@ disp(rect);
 target_rect = rect;
 [target_hist, ~, ~]=gen_hist(option, I,rect);
 rects = [rect];
-gamma = 0.1;
 for l = 2:len_file
+    if ~display
+        clc;
+        disp(sprintf('Processing frame %d/%d', l, len_file));
+    end
     Im=imread([filepath,myfile(l).name]);  
     switch option
         case 'normal'
@@ -47,58 +50,52 @@ for l = 2:len_file
             im_title = 'Fixed bounding box size';
             hist_title = 'Color distribution groundtruth vs predicted';
         case 'scale'
-            scale_num = 5;
-            ro = zeros(scale_num, 1);
-            can_hist_s = zeros(scale_num, length(target_hist));
-            rect_s = zeros(scale_num, 4);
-            for i_scale = 1:scale_num
-                can_rects = gen_rect('scale', rect, i_scale, scale_num);
-                [ can_hist, can_rect ] = meanshift(Im , can_rects, target_hist,option );
-                can_hist_s(i_scale,:) =  can_hist;
-                rect_s(i_scale,:) = can_rect;
-                ro(i_scale) = sum(sqrt(target_hist.*can_hist));
-            end
-            [rou, max_i] = max(ro);
-
-            new_rect = rect_s(max_i,:);
-            rect = new_rect * gamma +  rect* (1-gamma); 
-            [ can_hist, rect ] = meanshift(Im , rect , target_hist, option );
+            [can_hist,rect] = scale(Im, rect, target_hist,option);
             im_title = sprintf('Bounding box size: %.2f * %.2f', rect(3),rect(4));
             hist_title = 'Color distribution groundtruth vs predicted';
-            fprintf('value: %f, scale: %d\n', rou, max_i);
         case 'bg_scale'
-            scale_num = 5;
-            ro = zeros(scale_num, 1);
-            can_hist_s = zeros(scale_num, length(target_hist));
-            rect_s = zeros(scale_num, 4);
-            for i_scale = 1:scale_num
-                can_rects = gen_rect('scale', rect, i_scale, scale_num);
-                [ can_hist, can_rect ] = meanshift(Im , can_rects, target_hist, option );
-                can_hist_s(i_scale,:) =  can_hist;
-                rect_s(i_scale,:) = can_rect;
-                ro(i_scale) = sum(sqrt(target_hist.*can_hist));
-            end
-            [rou, max_i] = max(ro);
-            new_rect = rect_s(max_i,:);
-            rect = new_rect * gamma +  rect* (1-gamma); 
-            [ can_hist, rect ] = meanshift(Im , rect , target_hist, option );
+            [can_hist,rect] = scale(Im, rect, target_hist,option);
             im_title = sprintf('Bounding box size: %.2f * %.2f', rect(3),rect(4));
             hist_title = 'Color distribution groundtruth vs predicted';
 
-            fprintf('value: %f, scale: %d\n', rou, max_i);
-        case 'kalman'
+        case 'bg_scale_amp'
+            [can_hist,rect] = scale(Im, rect, target_hist,option);
+            im_title = sprintf('Bounding box size: %.2f * %.2f', rect(3),rect(4));
+            hist_title = 'Color distribution groundtruth vs predicted';
+        case 'bg_scale_lb'
+            [can_hist,rect] = scale(Im, rect, target_hist,option);
+            im_title = sprintf('Bounding box size: %.2f * %.2f', rect(3),rect(4));
+            hist_title = 'Color distribution groundtruth vs predicted';
+        case 'kalman_fv'
             if l == 2
                 last_x = [ rect(1) + rect(3)/2, rect(2) + rect(4)/2, 0.5, 0.5]';
                 last_P = [100,0,0,0;0,100,0,0;0,0,100,0;0,0,0,100];
             end
-            disp(last_x);
-            disp(last_P);
-            [ can_hist, this_rect ] = meanshift(Im , rect, target_hist, option);
-            [ last_x ,last_P ] = exe_kalman( last_x, last_P, Im, target_rect, this_rect); 
+            [ can_hist, this_rect ] = scale(Im, rect, target_hist,'scale');
+            [ last_x ,last_P ] = exec_kalman( last_x, last_P, Im, target_rect, this_rect, option); 
+            %fprintf('tracker computed rect: (%f,%f,%f,%f)\n',this_rect(1),this_rect(2), this_rect(3),this_rect(4));
+            rect = [ last_x(1) - this_rect(3)/2, last_x(2) - this_rect(4)/2, this_rect(3:4)];
+            %fprintf('kalman corrected rect: (%f,%f,%f,%f)\n',rect(1),rect(2), rect(3),rect(4));
+            im_title = sprintf('Bounding box size: %.2f * %.2f', rect(3),rect(4));
+            hist_title = 'Color distribution groundtruth vs predicted';
+            if display
+                plot_tracking( Im, target_hist, can_hist, rect, im_title, hist_title, 1, this_rect);
+            end
+        case 'kalman_adv'
+            if l == 2
+                last_x = [ rect(1) + rect(3)/2, rect(2) + rect(4)/2, 0.5, 0.5]';
+                last_P = [100,0,0,0;0,100,0,0;0,0,100,0;0,0,0,100];
+            end
+            [ can_hist, this_rect ] = scale(Im, rect, target_hist,'scale');
+            [ last_x ,last_P ] = exec_kalman( last_x, last_P, Im, target_rect, this_rect, option); 
             fprintf('tracker computed rect: (%f,%f,%f,%f)\n',this_rect(1),this_rect(2), this_rect(3),this_rect(4));
             rect = [ last_x(1) - this_rect(3)/2, last_x(2) - this_rect(4)/2, this_rect(3:4)];
             fprintf('kalman corrected rect: (%f,%f,%f,%f)\n',rect(1),rect(2), rect(3),rect(4));
-            plot_tracking( Im, target_hist, can_hist, rect, 1, this_rect);
+            im_title = sprintf('Bounding box size: %.2f * %.2f', rect(3),rect(4));
+            hist_title = 'Color distribution groundtruth vs predicted';
+            if display
+                plot_tracking( Im, target_hist, can_hist, rect, im_title, hist_title, 1, this_rect);
+            end
         otherwise
             fprintf('Not supported option;\n');
     end

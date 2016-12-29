@@ -4,10 +4,7 @@ Y = [2,2];
 max_iter = 20;
 iter = 0;
 while(norm(Y)^2 >0.5) && iter< max_iter
-%    fprintf('iteration %d\n', iter);
     iter = iter + 1;
-%     fprintf('iteration %d', iter);
-%     disp(rect);
     [row, col, ~] = size(imcrop(Im, rect));
     [can_hist,can_bin, can_bg]=gen_hist(option, Im, rect); 
     % weight vector
