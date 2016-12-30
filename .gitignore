@@ -1,0 +1,17 @@
+dino/
+neuroscience/hw2/c2p3.mat
+neuroscience/hw2/data/
+neuroscience/hw3/.DS_Store
+neuroscience/hw3/prob3_for_students/mnist.pkl
+neuroscience/hw3/prob3_for_students/mnist/
+neuroscience/hw4/mnist/
+neuroscience/proj1/figures/
+neuroscience/proj1/lib/
+**/.DS_Store
+**/*.m~
+**/.*.swp
+**/*.aux
+**/*.log
+**/data/**
+**/*.sty
+**/*.gz

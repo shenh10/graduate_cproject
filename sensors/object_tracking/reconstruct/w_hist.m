@@ -2,7 +2,8 @@ function [histo,bin]=w_hist(I,rect, normal, varargin)
 nbins = 4096;
 normalize = 16; % invariant for small rgd changes
 image = imcrop(I, rect);
-[row, col, ~] = size(image);
+[row, col, channel] = size(image);
+
 weight = kernel(row, col);
 extra_weight = ones(1,nbins);
 ring = 0;
@@ -27,9 +28,15 @@ for i=1:row
                 continue;
             end
         end
-            q_r=fix(double(image(i,j,1))/normalize);                               
-            q_g=fix(double(image(i,j,2))/normalize);  
-            q_b=fix(double(image(i,j,3))/normalize);  
+            if channel == 1
+                q_r=fix(double(image(i,j))/normalize);                               
+                q_g=fix(double(image(i,j))/normalize);  
+                q_b=fix(double(image(i,j))/normalize); 
+            else
+                q_r=fix(double(image(i,j,1))/normalize);                               
+                q_g=fix(double(image(i,j,2))/normalize);  
+                q_b=fix(double(image(i,j,3))/normalize); 
+            end
             bin(i,j)=q_r*256+q_g*16+q_b;                                              
             histo(bin(i,j)+1)= histo(bin(i,j)+1)+weight(i,j)* extra_weight(bin(i,j)+1);                
     end

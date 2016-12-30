@@ -2,8 +2,7 @@ function plot_compare(image_path, rects, case_name, colors, result_path,write)
 [cases, dim, frames] = size(rects);
 % load images
 myfile=dir([image_path,'*.jpg']); 
-frames =length(myfile);  
-if 1
+if 0
 figure(1);
 if write
 outputVideo = VideoWriter(fullfile(result_path,'demo_all.avi'));
@@ -42,7 +41,7 @@ for i = 1:frames
 end
 h = [];
 for i = 2:cases
-h1 = plot(ops(:,i), colors(i));
+h1 = plot(ops(1:5:frames,i), colors(i));
 h = [h,h1];
 hold on;
 end
